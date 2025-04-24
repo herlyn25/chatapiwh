@@ -10,5 +10,14 @@ export class AppController {
    return this.httpCustomService.sendMessageWHAPI(body.to);
   }
 
+  @Post("/text")
+  sendText(@Body()body){
+    return this.httpCustomService.responseMessageWHAPI(body.to,body.message)
+  }
+  @Post("/emojin")
+  sendEmoji(@Body()body){
+    return this.httpCustomService.responseMessageWHAPI(body.to,body.emojin)
+  }
+
   
 }

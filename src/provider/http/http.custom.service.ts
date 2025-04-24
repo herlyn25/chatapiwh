@@ -51,7 +51,65 @@ export class HttpCustomService {
             return error.response.data
           }        
       }  
-      async responseMessageWHAPI(){
 
+      async responseMessageWHAPI(to:string, message:string){
+        const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
+        const config:AxiosRequestConfig = {
+          headers: {
+            Authorization : `Bearer ${this.GRAPH_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          }
+          
+        }
+        const body = { 
+          messaging_product : "whatsapp",
+          to:to, 
+          type:"text",
+          text: { 
+              preview_url: false,
+              body: message                
+              }
+          }
+    
+          try{
+            const response = await firstValueFrom(
+              this.httpService.post(url_path, body, config),);
+              return response.data;
+         
+          }catch(error){
+            console.error('Error al enviar mensaje WhatsApp:', error?.response?.data) 
+            return error.response.data
+          }  
+      
+      }
+
+      async sendEmojin(to:string,emojin:string){
+        const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
+        const config:AxiosRequestConfig = {
+          headers: {
+            Authorization : `Bearer ${this.GRAPH_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          }
+          
+        }
+        const body = { 
+          messaging_product : "whatsapp",
+          to:to, 
+          type:"reaction",
+          reaction: { 
+              message_id: "wamid.HBgMNTczMDI4MDk5ODgyFQIAERgSMUJDMzYzOTVFNjkyQUEzMDQyAA==",
+              emoji: emojin                
+              }
+          }
+    
+          try{
+            const response = await firstValueFrom(
+              this.httpService.post(url_path, body, config),);
+              return response.data;
+         
+          }catch(error){
+            console.error('Error al enviar mensaje WhatsApp:', error?.response?.data) 
+            return error.response.data
+          }  
       }
 }
