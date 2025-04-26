@@ -11,7 +11,7 @@ export class HttpCustomService {
     private readonly phone_number_id:string;
     private readonly version:string;
     private readonly url: string;
-
+    
     constructor (configService: ConfigService, private readonly httpService:HttpService){
         this.WEBHOOK_VERIFY_TOKEN = configService.get<string>('WEBHOOK_VERIFY_TOKEN')!;
         this.GRAPH_API_TOKEN = configService.get<string>('GRAPH_API_TOKEN')!; 
@@ -20,7 +20,7 @@ export class HttpCustomService {
         this.url = configService.get<string>('url')!;
       }  
       
-      async sendMessageWHAPI(to: string){
+      async sendMessageTemplate(to: string){
         const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
         const config:AxiosRequestConfig = {
           headers: {
@@ -52,7 +52,7 @@ export class HttpCustomService {
           }        
       }  
 
-      async responseMessageWHAPI(to:string, message:string){
+      async sendMessageText(to:string, message:string){
         const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
         const config:AxiosRequestConfig = {
           headers: {
@@ -83,7 +83,7 @@ export class HttpCustomService {
       
       }
 
-      async sendEmojin(to:string,emojin:string){
+      async sendMessageEmojin(to:string,emojin:string){
         const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
         const config:AxiosRequestConfig = {
           headers: {
@@ -112,4 +112,6 @@ export class HttpCustomService {
             return error.response.data
           }  
       }
+
+      
 }

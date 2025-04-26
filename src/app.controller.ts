@@ -7,16 +7,16 @@ export class AppController {
 
   @Post()
   getHello(@Body() body): Promise<any> {
-   return this.httpCustomService.sendMessageWHAPI(body.to);
+   return this.httpCustomService.sendMessageTemplate(body.to);
   }
 
   @Post("/text")
   sendText(@Body()body){
-    return this.httpCustomService.responseMessageWHAPI(body.to,body.message)
+    return this.httpCustomService.sendMessageText(body.to,body.message)
   }
   @Post("/emojin")
   sendEmoji(@Body()body){
-    return this.httpCustomService.responseMessageWHAPI(body.to,body.emojin)
+    return this.httpCustomService.sendMessageEmojin(body.to,body.emojin)
   }
 
   
