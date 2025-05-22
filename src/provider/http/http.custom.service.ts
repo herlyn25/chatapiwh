@@ -34,9 +34,9 @@ export class HttpCustomService {
           to:to, 
           type:"template",
           template: { 
-              name: "hello_world",
+              name: "prueba",
               language: {
-                code:"en_US"
+                code:"es_CO"
                 }
               } 
           }
@@ -82,6 +82,55 @@ export class HttpCustomService {
           }  
       
       }
+      async sendImage(to:string, imageUrl:string, message:string []){
+        const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
+        const config:AxiosRequestConfig = {
+          headers: {
+            Authorization : `Bearer ${this.GRAPH_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          }          
+        }
+        const body = {
+          messaging_product: 'whatsapp',
+          to: to,
+          type: 'template',
+          template: {
+            name: 'citas_2',
+            language: {
+              code: 'es_ES',
+            },
+            components: [
+              {
+                type: 'header',
+                parameters: [
+                  {
+                    type: 'image',
+                    image: {
+                      link: imageUrl,
+                    },
+                  },
+                ],
+              },
+              {
+                type: 'body',
+                parameters: message.map((text) => ({
+                  type: 'text',
+                  text,
+                })),
+              },
+            ],
+          },
+        };    
+          try{
+            const response = await firstValueFrom(
+              this.httpService.post(url_path, body, config),);
+              return response.data;
+         
+          }catch(error){
+            console.error('Error al enviar mensaje WhatsApp:', error?.response?.data) 
+            return error.response.data
+          }      
+      }
 
       async sendMessageEmojin(to:string,emojin:string){
         const url_path = `${this.url}/${this.version}/${this.phone_number_id}/messages`
@@ -113,5 +162,44 @@ export class HttpCustomService {
           }  
       }
 
-      
+      async createTemplate(): Promise<any>{
+        const url_path = `${this.url}/${this.version}/1083960513748341/message_templates`
+        const config:AxiosRequestConfig = {
+          headers: {
+            Authorization : `Bearer ${this.GRAPH_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          }          
+        }
+        const template_data = {
+          name: "bienvenida_con_imagen",
+          category: "UTILITY",
+          language: "es_ES",
+          components: [
+            {
+              type: "HEADER",
+              format: "IMAGE",
+              example: {
+                header_handle: ["https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/color-fondo-imagen-r.png"]
+              }
+            },
+            {
+              type: "BODY",
+              text: "Hello me alegro que estes muy bien este es el mejor adhesivo por un valor de 1000",
+              example: {
+                body_text: [["John Doe", "100000"]]
+              }
+            }
+          ],          
+        };
+
+        try{
+          const response = await firstValueFrom(
+            this.httpService.post(url_path, template_data, config),);
+            return response.data;
+        
+        }catch(error){
+          console.error('Error al guardar template', error?.response?.data) 
+          return error.response.data
+        }  
+      }    
 }

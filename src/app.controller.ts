@@ -17,7 +17,13 @@ export class AppController {
   @Post("/emojin")
   sendEmoji(@Body()body){
     return this.httpCustomService.sendMessageEmojin(body.to,body.emojin)
+  }  
+  @Post('template')
+  async createTemplatePrueba(@Body()body){  
+    return this.httpCustomService.sendImage(body.to,body.image,body.message);
   }
-
-  
+  @Post('template_img')
+  async createTemplateImage(@Body()body){  
+    return this.httpCustomService.createTemplate();
+  }
 }
